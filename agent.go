@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"sync"
 
 	agent_pb "github.com/alexcogojocaru/btrace-agent/proto-gen/btrace_agent"
 	service "github.com/alexcogojocaru/btrace-agent/service"
@@ -24,10 +25,19 @@ func main() {
 	grpcServer := grpc.NewServer()
 	agentService := service.NewAgentService()
 
-	log.Printf("Starting Agent on %s:%d", host, port)
-	// Register the agent service to the gRPC server and serve the listener
-	agent_pb.RegisterAgentServiceServer(grpcServer, agentService)
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatal("Failed to serve the gRPC server")
-	}
+	var waitGroup sync.WaitGroup
+
+	waitGroup.Add(1)
+	go func() {
+		defer waitGroup.Done()
+
+		log.Printf("Starting Agent on %s:%d", host, port)
+		// Register the agent service to the gRPC server and serve the listener
+		agent_pb.RegisterAgentServiceServer(grpcServer, agentService)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatal("Failed to serve the gRPC server")
+		}
+	}()
+
+	waitGroup.Wait()
 }
