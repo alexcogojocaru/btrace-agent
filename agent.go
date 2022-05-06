@@ -6,7 +6,7 @@ import (
 	"net"
 	"sync"
 
-	agent_pb "github.com/alexcogojocaru/btrace-agent/proto-gen/btrace_agent"
+	agent "github.com/alexcogojocaru/btrace-agent/proto-gen/btrace_proxy"
 	service "github.com/alexcogojocaru/btrace-agent/service"
 	"google.golang.org/grpc"
 )
@@ -32,8 +32,9 @@ func main() {
 		defer waitGroup.Done()
 
 		log.Printf("Starting Agent on %s:%d", host, port)
+
 		// Register the agent service to the gRPC server and serve the listener
-		agent_pb.RegisterAgentServiceServer(grpcServer, agentService)
+		agent.RegisterAgentServer(grpcServer, agentService)
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Fatal("Failed to serve the gRPC server")
 		}
