@@ -1,0 +1,8 @@
+deploy:
+  hostname: '0.0.0.0'
+  port: 4576
+
+connections:
+  collector:
+    hostname: 'localhost'
+    port: 4578
