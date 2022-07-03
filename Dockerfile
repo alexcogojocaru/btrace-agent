@@ -1,8 +1,8 @@
 FROM golang:1.17-alpine
 
-WORKDIR /app
+WORKDIR /data
 
 COPY . .
-RUN go build -o /bin-agent
+RUN go build -o /data/bin-agent
 
-CMD [ "/bin-agent" ]
+CMD [ "/data/bin-agent" ]
