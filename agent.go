@@ -31,7 +31,7 @@ func main() {
 	agentService := service.NewAgentService(collectorUri)
 
 	log.Printf("Agent started on %s", uri)
-	agent.RegisterAgentServer(grpcServer, agentService)
+	agent.RegisterExporterServer(grpcServer, agentService)
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatal("Failed to serve the gRPC server")
 	}

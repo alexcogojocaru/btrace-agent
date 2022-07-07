@@ -13,8 +13,8 @@ const POLLING_INTERVAL = 1
 const BUFFER_SIZE = 50
 
 type AgentServiceImpl struct {
-	agent.UnimplementedAgentServer
-	CollectorClient agent.AgentClient
+	agent.UnimplementedExporterServer
+	CollectorClient agent.ExporterClient
 	Buffer          chan *agent.Span
 }
 
@@ -25,7 +25,7 @@ func NewAgentService(collectorUri string) *AgentServiceImpl {
 	}
 
 	service := &AgentServiceImpl{
-		CollectorClient: agent.NewAgentClient(conn),
+		CollectorClient: agent.NewExporterClient(conn),
 		Buffer:          make(chan *agent.Span, BUFFER_SIZE),
 	}
 
